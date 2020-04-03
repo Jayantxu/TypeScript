@@ -1,8 +1,3 @@
-/**
-* How to Use
-* npm install -g typescript
-* cmd tsc ts.ts
-*/
 
 /**可选属性*/
 interface SquareConfig {
@@ -45,3 +40,87 @@ interface SquareConfig2 {
     width?: Number;
     [propName: string]: any;
 }
+
+
+/** 函数类型 */
+interface SearchFunc {
+    (source: String, subString: String): Boolean;
+}
+let mySearchFunc: SearchFunc;
+mySearchFunc = function (source: String, subString: String) {
+    // return 1; // Type 'number' is not assignable to type 'Boolean'
+    return true;
+}
+
+
+/** 可索引类型 */
+interface IndexArray {
+    [index: number]: string;
+}
+let myArray: IndexArray;
+myArray = ['Jayant', 'Xu'];
+console.log(myArray[0]);
+
+let myArray1: string[] = ['Xu', 'Jayant'];
+console.log(myArray1[0]); 
+
+
+
+/** 类类型 */
+interface ClockInterfacex {
+    currentTime: Date;
+    setTime(d: Date);
+}
+class Clock implements ClockInterfacex {
+    currentTime: Date;
+    setTime(d: Date) {
+        this.currentTime = d;
+    }
+    constructor(h: number, m: number) { }
+}
+// 检测 constructor
+interface ClockConstructor {
+    new (hour: number, minute: number): ClockInterface;
+}
+interface ClockInterface {
+    tick();
+}
+function createClock(ctor: ClockConstructor, hour: number, minute: number): ClockInterface {
+    return new ctor(hour, minute);
+}
+class DigitalClock implements ClockInterface {
+    constructor(h: number, m: number) { }
+    tick() {
+        console.log("beep beep");
+    }
+}
+class AnalogClock implements ClockInterface {
+    constructor(h: number, m: number) { }
+    tick() {
+        console.log("tick tock");
+    }
+}
+let digital = createClock(DigitalClock, 12, 17);
+let analog = createClock(AnalogClock, 7, 32);
+
+
+/** 继承接口 */
+interface Shape {
+    color: string;
+}
+interface Square extends Shape {
+    area: number;
+}
+let squarr = <Square>{}; // => let squarr: Square = {};
+squarr.color = 'blue';
+squarr.area = 100;
+// 继承多个接口
+interface PenStroke {
+    penWidth: number;
+}
+interface penSquare extends Shape,PenStroke {
+    sideLength: Number;
+}
+let penSquaree = <penSquare>{};
+penSquaree.sideLength = 20;
+penSquaree.penWidth = 30;
